@@ -105,6 +105,20 @@
   }));
   const projectCards = $$(".project-card");
   const projectCount = $("#projectCount");
+  const projectSlugs = {
+    "UniCode": "unicode",
+    "Cafe Recontre": "cafe-recontre",
+    "Gentle One": "gentle-one",
+    "QuickNotes": "quicknotes"
+  };
+  projectCards.forEach(card => {
+    const title = $("h3", card)?.textContent.trim();
+    const link = $(".project-link", card);
+    if (title && link && projectSlugs[title]) {
+      link.href = `project.html?project=${projectSlugs[title]}`;
+      link.setAttribute("aria-label", `View ${title} project details`);
+    }
+  });
   $$("[data-filter]").forEach(button => button.addEventListener("click", () => {
     $$("[data-filter]").forEach(item => {
       const selected = item === button;
@@ -123,6 +137,32 @@
   const modal = $("#imageModal");
   const modalImage = $("#modalImage");
   let lastFocusedElement;
+  const projectScreenshots = {
+    "Preview UniCode visual": "assets/images/projects/unicode.webp",
+    "Preview Cafe Recontre visual": "assets/images/projects/cafe-recontre.webp",
+    "Preview Gentle One visual": "assets/images/projects/gentle-one.webp",
+    "Preview QuickNotes visual": "assets/images/projects/quicknotes.webp"
+  };
+  $$(".preview-trigger").forEach(button => {
+    const screenshot = projectScreenshots[button.getAttribute("aria-label")];
+    if (!screenshot) return;
+    const fallback = button.classList.contains("visual-two")
+      ? "assets/images/project-placeholder-2.svg"
+      : button.classList.contains("visual-three")
+        ? "assets/images/project-placeholder-3.svg"
+        : "assets/images/project-placeholder-1.svg";
+    button.dataset.screenshot = screenshot;
+    const image = document.createElement("img");
+    image.className = "project-screenshot";
+    image.src = fallback;
+    image.alt = `${button.getAttribute("aria-label")} preview`;
+    image.loading = "lazy";
+    image.decoding = "async";
+    image.addEventListener("error", () => {
+      image.src = fallback;
+    }, { once: true });
+    button.prepend(image);
+  });
   const closeModal = () => {
     modal.classList.remove("open");
     modal.setAttribute("aria-hidden", "true");
@@ -133,6 +173,14 @@
   $$(".preview-trigger").forEach(button => button.addEventListener("click", () => {
     lastFocusedElement = button;
     modalImage.src = button.dataset.preview;
+    modalImage.onerror = () => {
+      modalImage.onerror = null;
+      modalImage.src = button.classList.contains("visual-two")
+        ? "assets/images/project-placeholder-2.svg"
+        : button.classList.contains("visual-three")
+          ? "assets/images/project-placeholder-3.svg"
+          : "assets/images/project-placeholder-1.svg";
+    };
     modalImage.alt = `${button.getAttribute("aria-label") || "Project"} preview`;
     modal.classList.add("open");
     modal.setAttribute("aria-hidden", "false");
@@ -164,6 +212,12 @@
     if (recipient.includes("YOUR_EMAIL")) {
       status.textContent = "Form validated. Add your email address to the contact link before enabling email preparation.";
       showToast("Validation passed â€” add your email address first.");
+      return;
+    }
+
+    if (contactForm.dataset.netlify === "true" && window.location.protocol !== "file:") {
+      status.textContent = "Sending your message…";
+      HTMLFormElement.prototype.submit.call(contactForm);
       return;
     }
 

@@ -72,7 +72,7 @@
       <div class="about-layout">
         <div class="portrait-wrap reveal">
           <div class="portrait-frame">
-            <img src="assets/images/profile-personal.jpg" alt="Mark Laurence Moratalla in a casual portrait" id="profileImage">
+            <img src="assets/images/profile-personal.jpg" alt="Mark Laurence Moratalla in a casual portrait" id="profileImage" width="400" height="409" fetchpriority="high" decoding="async">
             <span class="portrait-label">[ MARK LAURENCE MORATALLA ]</span>
           </div>
           <p class="image-instruction">Profile portrait for this portfolio.</p>
@@ -198,7 +198,10 @@
             <a href="https://www.facebook.com/kalix13359" target="_blank" rel="noopener noreferrer">FACEBOOK ↗</a>
           </div>
         </div>
-        <form class="contact-form reveal" id="contactForm" novalidate>
+        <form class="contact-form reveal" id="contactForm" name="contact" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+          <input type="hidden" name="form-name" value="contact">
+          <label class="sr-only" for="bot-field">Leave this field empty</label>
+          <input class="honeypot" id="bot-field" name="bot-field" tabindex="-1" autocomplete="off">
           <label for="name">YOUR NAME</label>
           <input id="name" name="name" type="text" placeholder="Full name" required minlength="2">
           <label for="email">EMAIL ADDRESS</label>
