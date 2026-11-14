@@ -138,10 +138,10 @@
   const modalImage = $("#modalImage");
   let lastFocusedElement;
   const projectScreenshots = {
-    "Preview UniCode visual": "assets/images/projects/unicode.webp",
-    "Preview Cafe Recontre visual": "assets/images/projects/cafe-recontre.webp",
-    "Preview Gentle One visual": "assets/images/projects/gentle-one.webp",
-    "Preview QuickNotes visual": "assets/images/projects/quicknotes.webp"
+    "Preview UniCode visual": "assets/images/projects/unicode.svg",
+    "Preview Cafe Recontre visual": "assets/images/projects/cafe-recontre.svg",
+    "Preview Gentle One visual": "assets/images/projects/gentle-one.svg",
+    "Preview QuickNotes visual": "assets/images/projects/quicknotes.svg"
   };
   $$(".preview-trigger").forEach(button => {
     const screenshot = projectScreenshots[button.getAttribute("aria-label")];
@@ -154,7 +154,7 @@
     button.dataset.screenshot = screenshot;
     const image = document.createElement("img");
     image.className = "project-screenshot";
-    image.src = fallback;
+    image.src = screenshot;
     image.alt = `${button.getAttribute("aria-label")} preview`;
     image.loading = "lazy";
     image.decoding = "async";

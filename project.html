@@ -4,8 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Project details from Mark Laurence Moratalla's digital portfolio.">
+  <meta name="author" content="Mark Laurence Moratalla">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="assets/images/social-preview.svg">
   <title>Project details — Mark Laurence Moratalla</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
   <style>
     .project-detail-page { min-height: 100svh; padding: 150px var(--gutter) 90px; }
     .project-detail { max-width: 980px; margin: 0 auto; }
@@ -16,6 +20,8 @@
     .project-detail-meta { border-top: 1px solid var(--line); padding-top: 20px; font: 10px/2 var(--mono); color: #999; }
     .project-detail-meta strong { display: block; color: #fff; font-weight: 400; }
     .project-detail-links { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 35px; }
+    .project-external-links { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 26px; }
+    .muted-link { color: #666; cursor: not-allowed; }
     @media (max-width: 700px) { .project-detail-page { padding-top: 120px; } .project-detail-grid { grid-template-columns: 1fr; gap: 35px; } }
   </style>
 </head>
@@ -35,6 +41,7 @@
             <a class="button button-light" href="index.html#contact">ASK ABOUT THIS PROJECT <span>↗</span></a>
             <a class="text-link" href="index.html#projects">VIEW ALL WORK <span>↗</span></a>
           </div>
+          <div class="project-external-links" id="projectLinks" aria-label="Project links"></div>
         </div>
         <div class="project-detail-meta" id="projectMeta"></div>
       </div>
@@ -42,10 +49,10 @@
   </main>
   <script>
     const projects = {
-      unicode: { title: "UNI CODE", type: "CAPSTONE PROJECT", description: "A capstone project focused on making programming practice more approachable for students.", meta: "CAPSTONE\nWEB DEVELOPMENT" },
-      "cafe-recontre": { title: "CAFE RECONTRE", type: "WEBSITE ACTIVITY", description: "A coffee website activity exploring menu presentation, atmosphere, and responsive layout.", meta: "WEB DESIGN\nFRONT END" },
-      "gentle-one": { title: "GENTLE ONE", type: "WEBSITE ACTIVITY", description: "A men's attire website activity built around product presentation and a clean visual identity.", meta: "WEB DESIGN\nE-COMMERCE" },
-      quicknotes: { title: "QUICK NOTES", type: "ANDROID STUDIO PROJECT", description: "An Android Studio project for capturing and organizing notes quickly.", meta: "ANDROID\nMOBILE APP" }
+      unicode: { title: "UNI CODE", type: "CAPSTONE PROJECT", description: "A capstone project focused on making programming practice more approachable for students.", meta: "CAPSTONE\nWEB DEVELOPMENT", live: "", github: "" },
+      "cafe-recontre": { title: "CAFE RECONTRE", type: "WEBSITE ACTIVITY", description: "A coffee website activity exploring menu presentation, atmosphere, and responsive layout.", meta: "WEB DESIGN\nFRONT END", live: "", github: "" },
+      "gentle-one": { title: "GENTLE ONE", type: "WEBSITE ACTIVITY", description: "A men's attire website activity built around product presentation and a clean visual identity.", meta: "WEB DESIGN\nE-COMMERCE", live: "", github: "" },
+      quicknotes: { title: "QUICK NOTES", type: "ANDROID STUDIO PROJECT", description: "An Android Studio project for capturing and organizing notes quickly.", meta: "ANDROID\nMOBILE APP", live: "", github: "" }
     };
     const project = projects[new URLSearchParams(location.search).get("project")] || projects.unicode;
     document.title = `${project.title.replace(" ", "")} — Mark Laurence Moratalla`;
@@ -53,6 +60,25 @@
     document.querySelector("#projectType").textContent = project.type;
     document.querySelector("#projectDescription").textContent = project.description;
     document.querySelector("#projectMeta").innerHTML = project.meta.split("\n").map(item => `<strong>${item}</strong>`).join("");
+    const links = [];
+    links.push(project.live
+      ? `<a class="text-link" href="${project.live}" target="_blank" rel="noopener noreferrer">LIVE DEMO ↗</a>`
+      : `<span class="text-link muted-link">LIVE DEMO — URL PENDING</span>`);
+    links.push(project.github
+      ? `<a class="text-link" href="${project.github}" target="_blank" rel="noopener noreferrer">GITHUB REPOSITORY ↗</a>`
+      : `<span class="text-link muted-link">GITHUB — URL PENDING</span>`);
+    document.querySelector("#projectLinks").innerHTML = links.join("");
+    const structuredData = document.createElement("script");
+    structuredData.type = "application/ld+json";
+    structuredData.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      "name": project.title,
+      "description": project.description,
+      "creator": { "@type": "Person", "name": "Mark Laurence Moratalla" },
+      "keywords": project.meta.replace(/\n/g, ", ")
+    });
+    document.head.appendChild(structuredData);
   </script>
 </body>
 </html>

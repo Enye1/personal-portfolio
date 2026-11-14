@@ -528,6 +528,19 @@ button {
   font-weight:400;
   margin-left:14px
 }
+
+.project-toolbar > span {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  line-height: 1.5;
+}
+
+.project-toolbar b {
+  margin-left: 0;
+  white-space: nowrap;
+}
 .project-filter {
   border-color:var(--dark-line);
   color:#777
