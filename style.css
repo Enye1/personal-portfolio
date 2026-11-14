@@ -537,6 +537,14 @@ button {
   line-height: 1.5;
 }
 
+.project-archive {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  line-height: 1.5;
+}
+
 .project-toolbar b {
   margin-left: 0;
   white-space: nowrap;
